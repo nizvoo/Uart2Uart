@@ -1,0 +1,21 @@
+#
+# Copyright (C) 2000-2013
+# nizvoo (AT) gmail.com
+#
+CC = $(CROSS)gcc
+RM = rm
+CP = cp
+BIN = Uart2Uart-GCC.exe
+SRC = Uart2Uart.c ../comm/ComPortUtils.c
+OBJ = Uart2Uart.o ComPortUtils.o
+CFLAGS = -I../../ -D_UNICODE -DUNICODE
+
+WSLIB = -lws2_32
+
+$(BIN): $(SRC)
+	$(CC) $(CFLAGS) $(SRC) $(WSLIB) -o $(BIN)
+
+PHONY: clean
+clean:
+	-$(RM) $(OBJ)
+	-$(RM) $(BIN)
