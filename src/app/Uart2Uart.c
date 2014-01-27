@@ -73,7 +73,7 @@ void show_user_buf(const char* buf, int len, int dir)
   fprintf(stdout, " :%d\n", len);
 }
 
-static HANDLE h;
+static HANDLE sh;
 static HANDLE dh;
 
 static void ForwardToUART(const char* buf, int len)
@@ -108,13 +108,13 @@ int main(int argc, char * argv[])
   _ftprintf(stdout, _T("DST %s:%d \n"),
 	user_data.dst_port_name, user_data.dst_baudrate);
  
-  h = ConnctComPort(user_data.src_port_name, user_data.src_baudrate); 
-  if (0 == h) {
+  sh = ConnctComPort(user_data.src_port_name, user_data.src_baudrate); 
+  if (0 == sh) {
     _sntprintf(full_port_name, MAX_PATH, _T("\\\\.\\%s"), user_data.src_port_name);
-    h = ConnctComPort(full_port_name, user_data.src_baudrate);
+    sh = ConnctComPort(full_port_name, user_data.src_baudrate);
   }
   
-  if (0 == h) {
+  if (0 == sh) {
     _tprintf(_T("Open %s failed\n"), user_data.src_port_name);
     return 0;
   }
@@ -123,7 +123,7 @@ int main(int argc, char * argv[])
   dh = ConnctComPort(user_data.dst_port_name, user_data.dst_baudrate); 
   if (0 == dh) {
     _sntprintf(full_port_name, MAX_PATH, _T("\\\\.\\%s"), user_data.dst_port_name);
-    h = ConnctComPort(full_port_name, user_data.dst_baudrate);
+    dh = ConnctComPort(full_port_name, user_data.dst_baudrate);
   }
   
   if (0 == dh) {
@@ -132,7 +132,7 @@ int main(int argc, char * argv[])
   }  
    
   while (running) {
-    len = ReadRSData(h, buf, BUF_LEN);
+    len = ReadRSData(sh, buf, BUF_LEN);
     if (len > 0) {
       ForwardToUART(buf, len);
       show_user_buf(buf, len, 0);
@@ -142,7 +142,7 @@ int main(int argc, char * argv[])
     if (_kbhit()) break;    
   }
 
-  CloseComPort(h);
+  CloseComPort(sh);
   CloseComPort(dh);
   
   return 0;

@@ -6,7 +6,6 @@
 
 #include "inc/comm/ComPortUtils.h"
 
-
 HANDLE ConnctComPort(const TCHAR* name, int dwBaudRate)
 {
 	DCB dcbConfig;
@@ -54,7 +53,7 @@ HANDLE ConnctComPort(const TCHAR* name, int dwBaudRate)
   }
 
 
-  if(GetCommTimeouts(hFile, &commTimeout)) { /* Configuring Read & Write Time Outs */
+  if (GetCommTimeouts(hFile, &commTimeout)) { /* Configuring Read & Write Time Outs */
 		commTimeout.ReadIntervalTimeout         = dwTimeOutInSec;
 		commTimeout.ReadTotalTimeoutConstant    = dwTimeOutInSec;
 		commTimeout.ReadTotalTimeoutMultiplier  = 0;
@@ -65,12 +64,12 @@ HANDLE ConnctComPort(const TCHAR* name, int dwBaudRate)
 		goto CLOSE_ON_FAILED;
   }
 
-  if( !SetCommTimeouts(hFile, &commTimeout)) {
+  if (!SetCommTimeouts(hFile, &commTimeout)) {
 
 		goto CLOSE_ON_FAILED;
   }
 
-  if(!SetCommMask(hFile, EV_RXCHAR)) { // Setting Event Type
+  if (!SetCommMask(hFile, EV_RXCHAR)) { // Setting Event Type
 
 		goto CLOSE_ON_FAILED;
   }
@@ -100,8 +99,7 @@ int ReadRSData(HANDLE h, BYTE* buf, int len)
 
 	BOOL ret = ReadFile(h, buf, len, &numRead, NULL);
 
-	if(!ret)
-	{
+	if(!ret) {
 		return 0;
 	}
 
