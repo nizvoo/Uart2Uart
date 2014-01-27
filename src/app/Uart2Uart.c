@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2000-2013
+  Copyright (C) 2000-2014
   nizvoo (AT) gmail.com
 */
 
@@ -10,13 +10,7 @@
 
 #include "inc/comm/ComPortUtils.h"
 
-
 #define BUF_LEN (512)
-
-#define HI8(X) ((X) >> 8)
-#define LO8(X) ((X) & 0x00ff)
-
-#define MAX_ONLINE (128)
 
 struct user_st
 {
