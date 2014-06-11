@@ -10,7 +10,7 @@
 
 #include "inc/comm/ComPortUtils.h"
 
-#define BUF_LEN (512)
+#define BUF_LEN (2048)
 
 struct user_st
 {
@@ -76,9 +76,9 @@ void show_user_buf(const char* buf, int len, int dir)
 static HANDLE sh;
 static HANDLE dh;
 
-static void ForwardToUART(const char* buf, int len)
+static void ForwardToUART(HANDLE h, const char* buf, int len)
 {  
-  WriteRSData(dh, buf, len);  
+  WriteRSData(h, buf, len);  
 }
 
 int main(int argc, char * argv[])
@@ -134,10 +134,17 @@ int main(int argc, char * argv[])
   while (running) {
     len = ReadRSData(sh, buf, BUF_LEN);
     if (len > 0) {
-      ForwardToUART(buf, len);
+      ForwardToUART(dh, buf, len);
       show_user_buf(buf, len, 0);
-      fprintf(stdout, "Forward to UART %d\n", len);      
+      fprintf(stdout, "Forward to DST UART %d\n", len);      
     }
+    
+    len = ReadRSData(dh, buf, BUF_LEN);
+    if (len > 0) {
+      ForwardToUART(sh, buf, len);
+      show_user_buf(buf, len, 1);
+      fprintf(stdout, "Forward to SRC UART %d\n", len);      
+    }    
 
     if (_kbhit()) break;    
   }
